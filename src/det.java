@@ -97,6 +97,109 @@ public class det {
 
         return (p == 0);
     }
+    
+    public static double calcDetIter(double[][] A){
+    	int zaehler = 0; // Für das erhöhen der Startparameter
+    	
+    	while(!is1NF(A)){ // Noch keine 1.NF
+    		A = processMatrix(A, zaehler, zaehler);
+    		zaehler++;
+    	}
+    	// 1. NF fertig
+    	// Hier Determinante bestimmen aus 1.NF
+    
+    }
+    
+    private static double[][] processMatrix(double[][] A, int startZeile, int startSpalte){
+    	// Mach die gesamte Spalte zu 1 indem die Werte auf der Diagonalen durch sich selbst geteilt werden, z.B. 3 / 3 = 1
+    	// Ziel = Diagonale aus 1
+    	// Mal pruefen , ob startSpalte weg kann - spaeter
+    	double[] diagonalRow = A[startZeile]; // Zwischenspeichern der Zeile wo aktuell die Diagonale bearbeitet wird
+    	for(int i = startZeile; i < A.length; i++){
+    		double divideValue = A[startZeile][startSpalte];
+    		A[i] = divideLineValues(A[i], divideValue); // Zeilen werden geteilt
+    	}
+    	
+    	// Jetzt sollte die ganze Spalte aus 1 bestehen
+    	// Nun die 1 unter den Diagonalen zu 0 machen
+    	// Wie? Einfach die Zeilen unter der Diagonalen mit der ersten Zeile subtrahieren
+    	// Anfangen mit der ersten Zeile UNTER der Diagonalen
+    	for(int i = startZeile + 1; i < A.length; i++){
+    		A[i] = subtractLines(A[i], diagonalRow);
+    	}
+    	// Sollte fertig sein
+    	return A;
+    }
+    // Teilt eine gesamte Zeile mit einem angegebenen Quoutienten
+    private static double[] divideLineValues(double[] row, double divideValue){
+    	// Hier nur die gesamte Zeile durchgehen 
+    	double[] tempArray = new double[row.length];
+    	for(int spalte = 0; spalte < row.length; spalte++){
+    		tempArray[spalte] = row[spalte] / divideValue;
+    	}
+    	return tempArray;
+    }
+    // Zieht zwei Zeilen voneinander ab
+    private static double[] subtractLines(double[] resultLine, double[] subtractionLine){
+    	double[] tempArray = new double[resultLine.length];
+		for(int spalte = 0; spalte < resultLine.length; spalte++){
+			tempArray[spalte] = resultLine[spalte] - subtractionLine[spalte];
+		}
+		return tempArray;
+    }
+    
+    //Checken ob Matrix in erste normalform
+    // Besteht Diagonale aus 1?
+    // Auf Nullzeilen achten!
+    // fertig
+    private static boolean is1NF(double[][] A){
+    	for(int i = 0; i < A.length; i++){
+    		for(int j = 0; j < A[i].length; j++){
+    			if(i == j){
+    				// Diagonale
+    				if(A[i][j] != 1){
+    					if(A[i][j] != 0){
+    						return false; // Keine Nullzeile
+    					}
+    					else{
+    						// Nullzeile vielleicht? i = zeile
+    						// Erst nach links prüfen, dann nach rechts prüfen
+        					for(int links = j-1; links > -1; links--){
+        						if(A[i][links] != 0){ // Keine Nullzeile
+        							return false;
+        						}
+        					}
+        					for(int rechts = j+1; rechts < A.length; rechts++){
+        						if(A[i][rechts] != 0){ // Keine Nullzeile
+        							return false;
+        						}
+        					}
+    					}
+        			}
+    			}
+    		}
+    	} // Prüfung Nullzeilen und Diagonalen komplett
+    	//Prüfung, ob unter Diagonale Nullen vorhanden
+    	for(int i = 0; i < A.length; i++) {
+            for(int j = 0; j < i; j++) {
+
+                if(A[i][j]!= 0) {
+                	return false; // Nicht alles Nullen
+                }
+            }
+        }
+    	// Alles gut, 1.NF hergestellt
+    	return true;
+    }
+    
+
+    
+    
+    
+
+	
+	
+	
 }
 
 
