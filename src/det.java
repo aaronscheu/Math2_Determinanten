@@ -3,24 +3,47 @@ public class det {
     
     //Berechnung mit 1. Normalform
     public static double calcDet(double[][] A){
+        int counter = 0; // Fï¿½r das erhï¿½hen der Startparameter
         double det = 0;
-        if (isTriangularMatrix(A)) {
-            for (int i = 0, j = 0; i < A.length && j < A.length; i++, j++)
-                det *= A[i][j];
 
-            return det;
+        while(!is1NF(A)){ // Noch keine 1.NF
+            A = processMatrix(A, counter, counter);
+            counter++;
         }
 
-        else return Double.NaN;
+//        if (isTriangularMatrix(A)) {
+//            for (int i = 0, j = 0; i < A.length && j < A.length; i++, j++) {
+//                det *= A[i][j];
+//                nrOfMult++;
+//            }
+//            return det;
+//        }
+
+        det =   A[A.length-2][A.length-2] * A[A.length-1][A.length-1] -
+                A[A.length-2][A.length-1] * A[A.length-1][A.length-2];
+
+        nrOfMult += 2;
+        return det;
     }
 
     //Rekursive Berechnung mit Def. L.4.1.1 Skript
+
+    /**
+     * Calculation of determinant is done by recursive implementation
+     * of the LaPlace algorithm.
+     * @param A 2D matrix with double values
+     * @return double value which represents the determinant
+     */
     public static double calcDetRec(double[][] A){
         double det = 0;
 
+        //Base case no. 1: Matrix is 1x1
         if (A.length == 1) {
             return A[0][0];
         }
+
+        //Base case no. 2: Matrix is 2x2
+        //Determinant is calculated by subtracting the products of both diagonals.
         else if (A.length == 2) {
             det = A[0][0] * A[1][1] - A[0][1] * A[1][0];
             nrOfMult += 2;
@@ -66,7 +89,7 @@ public class det {
 
     private static boolean isUpperTriangularMatrix (double[][] A) {
         int m = A.length;
-        int p=0;
+        int p = 0;
 
         for(int i = 0; i < m; i++) {
             for(int j = 0; j < i; j++) {
@@ -82,8 +105,8 @@ public class det {
     }
 
     private static boolean isLowerTriangularMatrix (double[][] A) {
-        int p=0;
         int m = A.length;
+        int p = 0;
 
         for(int i = 0; i < m; i++) {
             for(int j = i+1; j < m; j++) {
@@ -98,17 +121,17 @@ public class det {
         return (p == 0);
     }
     
-    public static double calcDetIter(double[][] A){
-    	int zaehler = 0; // Für das erhöhen der Startparameter
-    	
-    	while(!is1NF(A)){ // Noch keine 1.NF
-    		A = processMatrix(A, zaehler, zaehler);
-    		zaehler++;
-    	}
-    	// 1. NF fertig
-    	// Hier Determinante bestimmen aus 1.NF
-    
-    }
+//    public static double calcDetIter(double[][] A){
+//    	int zaehler = 0; // Fï¿½r das erhï¿½hen der Startparameter
+//
+//    	while(!is1NF(A)){ // Noch keine 1.NF
+//    		A = processMatrix(A, zaehler, zaehler);
+//    		zaehler++;
+//    	}
+//    	// 1. NF fertig
+//    	// Hier Determinante bestimmen aus 1.NF
+//
+//    }
     
     private static double[][] processMatrix(double[][] A, int startZeile, int startSpalte){
     	// Mach die gesamte Spalte zu 1 indem die Werte auf der Diagonalen durch sich selbst geteilt werden, z.B. 3 / 3 = 1
@@ -163,7 +186,7 @@ public class det {
     					}
     					else{
     						// Nullzeile vielleicht? i = zeile
-    						// Erst nach links prüfen, dann nach rechts prüfen
+    						// Erst nach links prï¿½fen, dann nach rechts prï¿½fen
         					for(int links = j-1; links > -1; links--){
         						if(A[i][links] != 0){ // Keine Nullzeile
         							return false;
@@ -178,8 +201,9 @@ public class det {
         			}
     			}
     		}
-    	} // Prüfung Nullzeilen und Diagonalen komplett
-    	//Prüfung, ob unter Diagonale Nullen vorhanden
+    	} // Prï¿½fung Nullzeilen und Diagonalen komplett
+
+        //Prï¿½fung, ob unter Diagonale Nullen vorhanden
     	for(int i = 0; i < A.length; i++) {
             for(int j = 0; j < i; j++) {
 
@@ -188,18 +212,10 @@ public class det {
                 }
             }
         }
-    	// Alles gut, 1.NF hergestellt
+
+        // Alles gut, 1.NF hergestellt
     	return true;
     }
-    
-
-    
-    
-    
-
-	
-	
-	
 }
 
 

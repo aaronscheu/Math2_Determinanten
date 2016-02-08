@@ -10,6 +10,7 @@ public class testDet {
     public testDet(String filename){
         test(filename);
     }
+
     public void test(String filename){
         A = readMatrixFromFile(filename);
         if (A==null) return;
@@ -24,7 +25,7 @@ public class testDet {
         System.out.println();
         
         det.nrOfMult = 0;
-        System.out.println("det(A) = " + det.calcDetRec(A));
+        System.out.println("det(A) = " + det.calcDet(A));
         System.out.println("Anzahl der Multiplikationen: "+det.nrOfMult);
     }
 
